@@ -114,7 +114,7 @@ export default function Signup() {
                             {isLoading ? (
                                 <ActivityIndicator color={COLORS.white} />
                             ) : (
-                                <Text style={styles.buttonText}>Login</Text>
+                                <Text style={styles.buttonText}>Sign Up</Text>
                             )}
                         </TouchableOpacity>
                         {/* Footer */}
