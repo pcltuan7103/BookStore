@@ -6,6 +6,9 @@ import { Ionicons } from '@expo/vector-icons';
 import COLORS from '@/constants/colors';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
+import { useAuthStore } from '@/store/authStore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { API_URL } from '@/constants/api';
 
 export default function Create() {
     const [title, setTitle] = useState("");
@@ -16,6 +19,7 @@ export default function Create() {
     const [loading, setLoading] = useState(false);
 
     const router = useRouter();
+    const { token } = useAuthStore();
 
     const pickImage = async () => {
         try {
@@ -33,7 +37,7 @@ export default function Create() {
                 mediaTypes: "images",
                 allowsEditing: true,
                 aspect: [4, 3],
-                quality: 0.5,
+                quality: 0.3,
                 base64: true,
             })
 
@@ -56,7 +60,56 @@ export default function Create() {
         }
     }
 
-    const handleSubmit = async () => { }
+    const handleSubmit = async () => {
+        if (!title || !caption || !image || !rating) {
+            Alert.alert("Error", "All fields are required");
+            return;
+        }
+
+        try {
+            setLoading(true);
+
+            const uriParts = image.split(".");
+            const fileType = uriParts[uriParts.length - 1];
+            const imageType = fileType ? `image/${fileType.toLowerCase()}` : "image/jpeg";
+
+            const imageDataUrl = `data:${imageType};base64,${imageBase64}`;
+
+            const response = await fetch(`${API_URL}/books`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    title,
+                    caption,
+                    rating: rating.toString(),
+                    image: imageDataUrl,
+                }),
+            });
+
+            console.log(response)
+
+            const data = await response.json();
+
+            if (!response.ok) throw new Error(data.message || "Something went wrong");
+
+            Alert.alert("Success", "Your book recommendation has been posted!");
+            setTitle("");
+            setCaption("");
+            setRating(0);
+            setImage(null);
+            setImageBase64(null);
+
+            router.push("/tabs");
+        } catch (error: any) {
+            console.error("Error creating book", error);
+            Alert.alert("Error", error.message || "Something went wrong");
+        } finally {
+            setLoading(false);
+        }
+    }
 
     const renderRatingPicker = () => {
         const stars = [];
