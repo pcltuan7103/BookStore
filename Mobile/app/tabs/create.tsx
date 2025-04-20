@@ -19,7 +19,7 @@ export default function Create() {
     const [loading, setLoading] = useState(false);
 
     const router = useRouter();
-    const { token } = useAuthStore();
+    const { token, logout } = useAuthStore();
 
     const pickImage = async () => {
         try {
@@ -89,8 +89,6 @@ export default function Create() {
                 }),
             });
 
-            console.log(response)
-
             const data = await response.json();
 
             if (!response.ok) throw new Error(data.message || "Something went wrong");
@@ -132,6 +130,9 @@ export default function Create() {
             style={{ flex: 1 }}
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
+            <TouchableOpacity onPress={logout}>
+                <Text style={""}>Logout</Text>
+            </TouchableOpacity>
             <ScrollView
                 contentContainerStyle={styles.container}
                 style={styles.scrollViewStyle}

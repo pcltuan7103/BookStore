@@ -52,7 +52,7 @@ router.get("/", async (req, res) => {
 
         res.send({
             books,
-            currentPage,
+            currentPage: page,
             totalBooks,
             totalPages,
         });
