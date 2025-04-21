@@ -7,7 +7,6 @@ import COLORS from '@/constants/colors';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import { useAuthStore } from '@/store/authStore';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_URL } from '@/constants/api';
 
 export default function Create() {
@@ -19,7 +18,7 @@ export default function Create() {
     const [loading, setLoading] = useState(false);
 
     const router = useRouter();
-    const { token, logout } = useAuthStore();
+    const { token } = useAuthStore();
 
     const pickImage = async () => {
         try {
@@ -130,9 +129,6 @@ export default function Create() {
             style={{ flex: 1 }}
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
-            <TouchableOpacity onPress={logout}>
-                <Text style={""}>Logout</Text>
-            </TouchableOpacity>
             <ScrollView
                 contentContainerStyle={styles.container}
                 style={styles.scrollViewStyle}

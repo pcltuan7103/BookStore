@@ -10,9 +10,10 @@ interface ILogin {
 }
 
 interface AuthStore {
-    user: any;
+    user: User | null;
     token: string | null;
     isLoading: boolean;
+    isCheckingAuth: boolean;
     register: (values: IRegister) => Promise<{ success: boolean; error?: string }>;
     login: (values: ILogin) => Promise<{ success: boolean; error?: string }>;
     checkAuth: () => Promise<void>;

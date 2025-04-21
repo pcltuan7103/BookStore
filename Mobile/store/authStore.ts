@@ -6,6 +6,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
     user: null,
     token: null,
     isLoading: false,
+    isCheckingAuth: true,
 
     register: async (values: IRegister) => {
         set({ isLoading: true });
@@ -81,6 +82,8 @@ export const useAuthStore = create<AuthStore>((set) => ({
             set({ token, user });
         } catch (error) {
             console.log("Auth check error", error);
+        } finally {
+            set({ isCheckingAuth: false });
         }
     },
 

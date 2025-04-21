@@ -10,7 +10,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { formatPublicDate } from '@/lib/utils';
 import { Loader } from '@/components';
 
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export default function Home() {
     const { token } = useAuthStore();
